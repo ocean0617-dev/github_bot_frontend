@@ -405,9 +405,9 @@ const ViewEmails = () => {
                                   color: sent.sender === 'gmail' ? '#1976d2' : '#e65100',
                                   fontWeight: 500
                                 }}
-                                title={`Sent by ${sent.sender} on ${new Date(sent.sentAt).toLocaleString()}`}
+                                title={`Sent by ${sent.senderEmail || sent.sender} on ${new Date(sent.sentAt).toLocaleString()}`}
                               >
-                                {sent.sender.toUpperCase()}
+                                {sent.senderEmail || sent.sender.toUpperCase()}
                               </span>
                             ))}
                           </div>

@@ -135,12 +135,18 @@ const Repositories = () => {
                   <th>Total Emails</th>
                   <th>Collected</th>
                   <th>Last Sent</th>
+                  <th>Senders</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredRepositories.map((repo, index) => {
                   const lastSent = getLastSent(repo)
+                  // Extract unique sender emails from sendHistory
+                  const senderEmails = repo.sendHistory && repo.sendHistory.length > 0
+                    ? [...new Set(repo.sendHistory.map(h => h.senderEmail || h.sender).filter(Boolean))]
+                    : []
+                  
                   return (
                     <tr key={repo._id} style={{ animationDelay: `${index * 0.02}s` }} className="table-row-animate">
                       <td>
@@ -165,6 +171,30 @@ const Repositories = () => {
                           </span>
                         ) : (
                           <span className="text-muted">-</span>
+                        )}
+                      </td>
+                      <td>
+                        {senderEmails.length > 0 ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                            {senderEmails.map((senderEmail, idx) => (
+                              <span
+                                key={idx}
+                                style={{
+                                  display: 'inline-block',
+                                  padding: '0.25rem 0.5rem',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  backgroundColor: senderEmail.includes('gmail') ? '#e3f2fd' : '#fff3e0',
+                                  color: senderEmail.includes('gmail') ? '#1976d2' : '#e65100',
+                                  fontWeight: 500
+                                }}
+                              >
+                                {senderEmail}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-muted" style={{ fontSize: '0.875rem' }}>-</span>
                         )}
                       </td>
                       <td>

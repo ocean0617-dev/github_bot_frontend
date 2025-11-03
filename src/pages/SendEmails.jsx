@@ -18,7 +18,8 @@ const SendEmails = () => {
     smtpPort: '587',
     smtpUser: '',
     smtpPass: '',
-    senderName: ''
+    senderName: '',
+    allowResend: false
   })
   const [loading, setLoading] = useState(false)
   const [testingSMTP, setTestingSMTP] = useState(false)
@@ -188,7 +189,8 @@ const SendEmails = () => {
           user: formData.smtpUser.trim(),
           pass: formData.smtpPass,
           from: formData.smtpUser.trim(), // Set from to user email by default
-          senderName: formData.senderName.trim() || ''
+          senderName: formData.senderName.trim() || '',
+          allowResend: formData.allowResend || false
         }
       }
 
@@ -247,16 +249,18 @@ const SendEmails = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
             <div className="form-group">
               <label className="form-label">SMTP Host *</label>
-              <input
-                type="text"
-                className="form-input"
-                placeholder="smtp.gmail.com"
+              <select
+                className="form-select"
                 value={formData.smtpHost}
                 onChange={(e) => setFormData({ ...formData, smtpHost: e.target.value })}
                 disabled={loading}
                 required
-              />
-              <div className="form-help">e.g., smtp.gmail.com, smtp.outlook.com</div>
+              >
+                <option value="">Select SMTP Host...</option>
+                <option value="smtp.gmail.com">smtp.gmail.com</option>
+                <option value="smtp-mail.outlook.com">smtp-mail.outlook.com</option>
+              </select>
+              <div className="form-help">Select Gmail or Outlook SMTP server</div>
             </div>
 
             <div className="form-group">
@@ -717,7 +721,7 @@ const SendEmails = () => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
             <div className="form-group">
               <label className="form-label">Batch Size</label>
               <input
@@ -745,6 +749,21 @@ const SendEmails = () => {
                 disabled={loading}
               />
               <div className="form-help">Delay between batches in milliseconds</div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={formData.allowResend}
+                onChange={(e) => setFormData({ ...formData, allowResend: e.target.checked })}
+                disabled={loading}
+              />
+              <span>Allow sending to already sent emails</span>
+            </label>
+            <div className="form-help">
+              By default, emails that have already been sent by this sender are excluded. Enable this to allow resending to all emails.
             </div>
           </div>
 
