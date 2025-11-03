@@ -13,6 +13,7 @@ const ViewEmails = () => {
   const [repositoryFilter, setRepositoryFilter] = useState('')
   const [collectedFrom, setCollectedFrom] = useState('')
   const [collectedTo, setCollectedTo] = useState('')
+  const [sentStatus, setSentStatus] = useState('')
   const [selectedEmails, setSelectedEmails] = useState(new Set())
   const [repositories, setRepositories] = useState([])
 
@@ -34,7 +35,8 @@ const ViewEmails = () => {
         ...(search && { search }),
         ...(repositoryFilter && { repository: repositoryFilter }),
         ...(collectedFrom && { collectedFrom }),
-        ...(collectedTo && { collectedTo })
+        ...(collectedTo && { collectedTo }),
+        ...(sentStatus && { sentStatus })
       }
       const response = await emailAPI.getAll(params)
       setEmails(response.data.emails)
@@ -45,7 +47,7 @@ const ViewEmails = () => {
     } finally {
       setLoading(false)
     }
-  }, [page, pageSize, search, repositoryFilter, collectedFrom, collectedTo])
+  }, [page, pageSize, search, repositoryFilter, collectedFrom, collectedTo, sentStatus])
 
   useEffect(() => {
     fetchRepositories()
@@ -138,6 +140,7 @@ const ViewEmails = () => {
     setRepositoryFilter('')
     setCollectedFrom('')
     setCollectedTo('')
+    setSentStatus('')
     setPage(1)
   }
 
@@ -179,6 +182,21 @@ const ViewEmails = () => {
                 ))}
               </select>
             </div>
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <label className="form-label">Email Status</label>
+              <select
+                className="form-select"
+                value={sentStatus}
+                onChange={(e) => {
+                  setSentStatus(e.target.value)
+                  setPage(1)
+                }}
+              >
+                <option value="">All emails</option>
+                <option value="sent">Sent</option>
+                <option value="unsent">Unsent</option>
+              </select>
+            </div>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-end' }}>
             <div style={{ flex: 1, minWidth: '200px' }}>
@@ -206,7 +224,7 @@ const ViewEmails = () => {
               />
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              {(search || repositoryFilter || collectedFrom || collectedTo) && (
+              {(search || repositoryFilter || collectedFrom || collectedTo || sentStatus) && (
                 <button className="btn btn-secondary btn-sm" onClick={clearFilters}>
                   Clear Filters
                 </button>
