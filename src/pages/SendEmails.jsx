@@ -760,7 +760,7 @@ const SendEmails = () => {
                 onChange={(e) => setFormData({ ...formData, excludeAlreadySent: e.target.checked })}
                 disabled={loading}
               />
-              <span>Exclude already sent emails</span>
+              <span>Exclude already sent emails</span>+
             </label>
             <div className="form-help">
               By default, all emails can be sent (including already sent ones). Check this to exclude emails that have already been sent by this sender.
