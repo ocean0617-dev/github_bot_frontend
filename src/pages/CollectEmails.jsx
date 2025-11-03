@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 
 const CollectEmails = () => {
   const [repository, setRepository] = useState('')
+  const [githubToken, setGithubToken] = useState('')
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(null)
   const [options, setOptions] = useState({
@@ -49,7 +50,7 @@ const CollectEmails = () => {
     setProgress(null)
 
     try {
-      await githubAPI.collect(repository.trim(), options)
+      await githubAPI.collect(repository.trim(), options, githubToken.trim() || undefined)
       toast.success('Email collection started!')
     } catch (error) {
       setLoading(false)
@@ -78,6 +79,30 @@ const CollectEmails = () => {
             />
             <div className="form-help">
               Examples: facebook/react, https://github.com/nodejs/node, microsoft/vscode
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">GitHub Token (Optional)</label>
+            <input
+              type="password"
+              className="form-input"
+              placeholder="ghp_xxxx... (Leave empty for 60 requests/hour, add token for 5,000 requests/hour)"
+              value={githubToken}
+              onChange={(e) => setGithubToken(e.target.value)}
+              disabled={loading}
+            />
+            <div className="form-help">
+              Optional: Add a GitHub Personal Access Token to increase rate limit from 60 to 5,000 requests/hour
+              <br />
+              <a 
+                href="https://github.com/settings/tokens" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: '#60a5fa', textDecoration: 'underline' }}
+              >
+                Create token here
+              </a>
             </div>
           </div>
 

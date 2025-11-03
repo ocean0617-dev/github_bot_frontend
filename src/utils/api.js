@@ -12,8 +12,8 @@ const api = axios.create({
 
 // GitHub API
 export const githubAPI = {
-  collect: (repository, options) => api.post('/github/collect', { repository, options }),
-  getRateLimit: () => api.get('/github/rate-limit')
+  collect: (repository, options, githubToken) => api.post('/github/collect', { repository, options, githubToken }),
+  getRateLimit: (githubToken) => api.get('/github/rate-limit', { params: githubToken ? { token: githubToken } : {} })
 };
 
 // Email API
