@@ -19,7 +19,7 @@ const SendEmails = () => {
     smtpUser: '',
     smtpPass: '',
     senderName: '',
-    allowResend: false
+    excludeAlreadySent: false
   })
   const [loading, setLoading] = useState(false)
   const [testingSMTP, setTestingSMTP] = useState(false)
@@ -190,7 +190,7 @@ const SendEmails = () => {
           pass: formData.smtpPass,
           from: formData.smtpUser.trim(), // Set from to user email by default
           senderName: formData.senderName.trim() || '',
-          allowResend: formData.allowResend || false
+          excludeAlreadySent: formData.excludeAlreadySent || false
         }
       }
 
@@ -756,14 +756,14 @@ const SendEmails = () => {
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
               <input
                 type="checkbox"
-                checked={formData.allowResend}
-                onChange={(e) => setFormData({ ...formData, allowResend: e.target.checked })}
+                checked={formData.excludeAlreadySent}
+                onChange={(e) => setFormData({ ...formData, excludeAlreadySent: e.target.checked })}
                 disabled={loading}
               />
-              <span>Allow sending to already sent emails</span>
+              <span>Exclude already sent emails</span>
             </label>
             <div className="form-help">
-              By default, emails that have already been sent by this sender are excluded. Enable this to allow resending to all emails.
+              By default, all emails can be sent (including already sent ones). Check this to exclude emails that have already been sent by this sender.
             </div>
           </div>
 
